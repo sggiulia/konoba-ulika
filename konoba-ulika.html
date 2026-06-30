@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Konoba Ulika — Cucina Istriana Autentica · Fažana</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --straw:      #E8C97A;
+      --straw-dk:   #C9A852;
+      --straw-lt:   #F2DFA8;
+      --truffle:    #5C3D2E;
+      --truffle-dk: #3E281D;
+      --truffle-lt: #7A5640;
+      --linen:      #FBF6EB;
+      --parchment:  #F4E9D2;
+      --cream:      #FFFCF4;
+      --text:       #3E281D;
+      --text-mid:   #6B5040;
+      --text-lt:    #9C8270;
+      --border:     rgba(92,61,46,0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Lato', sans-serif; background: var(--linen); color: var(--text); line-height: 1.65; }
+
+    /* linen grain */
+    body::before {
+      content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.032'/%3E%3C/svg%3E");
+      opacity:.55;
+    }
+    body > * { position: relative; z-index: 1; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp    { from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);} }
+    @keyframes fadeIn    { from{opacity:0;}to{opacity:1;} }
+    @keyframes slideLeft { from{opacity:0;transform:translateX(28px);}to{opacity:1;transform:translateX(0);} }
+    @keyframes kenburns  { 0%{transform:scale(1);}100%{transform:scale(1.07) translate(-1%,-.5%);} }
+    @keyframes slideshow { 0%,30%{opacity:1;}35%,95%{opacity:0;}100%{opacity:0;} }
+
+    .hero-tag    { animation: fadeIn  .8s ease .1s both; }
+    .hero h1     { animation: fadeUp  1s cubic-bezier(.22,1,.36,1) .22s both; }
+    .hero-sub    { animation: fadeUp  1s cubic-bezier(.22,1,.36,1) .4s both; }
+    .hero-ctas   { animation: fadeUp  1s cubic-bezier(.22,1,.36,1) .56s both; }
+    .hero-rating { animation: fadeIn  .9s ease .74s both; }
+    .hero-right  { animation: slideLeft 1.1s cubic-bezier(.22,1,.36,1) .15s both; }
+
+    .reveal { opacity:0; transform:translateY(26px); transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1); }
+    .reveal.visible { opacity:1; transform:none; }
+    .d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}
+    .d4{transition-delay:.4s;}.d5{transition-delay:.5s;}
+
+    /* ── HEADER ── */
+    header {
+      position:sticky; top:0; z-index:100;
+      background:rgba(251,246,235,.96);
+      backdrop-filter:blur(14px);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 5%; height:70px;
+      border-bottom:1px solid var(--border);
+    }
+    .logo {
+      font-family:'Playfair Display',serif;
+      font-size:1.3rem; font-weight:700;
+      color:var(--truffle); text-decoration:none;
+    }
+    .logo em { font-style:italic; color:var(--straw-dk); }
+    nav { display:flex; gap:2rem; align-items:center; }
+    nav a {
+      font-family:'Lato',sans-serif;
+      font-size:.75rem; font-weight:400;
+      letter-spacing:.13em; text-transform:uppercase;
+      color:var(--text-mid); text-decoration:none;
+      transition:color .2s;
+    }
+    nav a:hover { color:var(--truffle); }
+    .btn-nav {
+      background:var(--truffle); color:var(--cream) !important;
+      padding:.44rem 1.3rem; border-radius:3px;
+      font-size:.72rem !important; letter-spacing:.13em !important;
+      transition:background .2s !important;
+    }
+    .btn-nav:hover { background:var(--truffle-dk) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      display:grid; grid-template-columns:1fr 1fr;
+      min-height:93vh; overflow:hidden;
+      background:var(--truffle-dk);
+    }
+    .hero-left {
+      display:flex; flex-direction:column; justify-content:center;
+      padding:5rem 5% 5rem 7%;
+    }
+
+    .hero-tag {
+      display:inline-flex; align-items:center; gap:.7rem;
+      font-family:'Lato',sans-serif;
+      font-size:.7rem; font-weight:700;
+      letter-spacing:.2em; text-transform:uppercase;
+      color:var(--straw);
+      margin-bottom:1.8rem;
+    }
+    .hero-tag::before { content:''; display:block; width:28px; height:1px; background:var(--straw); }
+
+    .hero h1 {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(2.6rem,4.8vw,4.8rem);
+      font-weight:700; color:var(--cream);
+      line-height:1.05; margin-bottom:1.4rem;
+    }
+    .hero h1 em { font-style:italic; color:var(--straw); }
+
+    .hero-sub {
+      font-size:.97rem; font-weight:300;
+      color:rgba(255,252,244,.6);
+      max-width:430px; line-height:1.85; margin-bottom:2.4rem;
+    }
+
+    .hero-ctas { display:flex; gap:1rem; flex-wrap:wrap; }
+
+    .btn-straw {
+      background:var(--straw); color:var(--truffle-dk);
+      font-family:'Lato',sans-serif;
+      font-size:.78rem; font-weight:700; letter-spacing:.13em; text-transform:uppercase;
+      padding:.9rem 2.2rem; text-decoration:none; border-radius:3px;
+      transition:background .25s,transform .2s,box-shadow .2s;
+      box-shadow:0 4px 20px rgba(232,201,122,.3);
+    }
+    .btn-straw:hover { background:var(--straw-lt); transform:translateY(-2px); box-shadow:0 8px 28px rgba(232,201,122,.4); }
+
+    .btn-ghost {
+      border:1px solid rgba(255,252,244,.2);
+      color:rgba(255,252,244,.65);
+      font-family:'Lato',sans-serif;
+      font-size:.78rem; font-weight:400; letter-spacing:.13em; text-transform:uppercase;
+      padding:.9rem 2.2rem; text-decoration:none; border-radius:3px;
+      transition:border-color .2s,color .2s,transform .2s;
+    }
+    .btn-ghost:hover { border-color:var(--straw); color:var(--straw); transform:translateY(-2px); }
+
+    /* hero rating */
+    .hero-rating {
+      margin-top:3rem; padding-top:2rem;
+      border-top:1px solid rgba(255,252,244,.08);
+      display:flex; align-items:center; gap:1.6rem;
+    }
+    .rating-num {
+      font-family:'Playfair Display',serif;
+      font-size:2.8rem; font-weight:700;
+      color:var(--cream); line-height:1;
+    }
+    .stars-row { display:flex; gap:3px; margin-bottom:.2rem; }
+    .stars-row svg { width:14px; height:14px; }
+    .rating-sub { font-size:.75rem; color:rgba(255,252,244,.4); }
+    .rating-sep { width:1px; height:36px; background:rgba(255,252,244,.1); }
+    .rating-note {
+      font-family:'Playfair Display',serif;
+      font-size:.95rem; font-style:italic;
+      color:var(--straw); line-height:1.4;
+    }
+
+    /* ── HERO RIGHT: slideshow ── */
+    .hero-right { position:relative; overflow:hidden; background:#2a1810; }
+    .slideshow { position:absolute; inset:0; }
+    .slide { position:absolute; inset:0; opacity:0; overflow:hidden; }
+    .slide img { width:100%; height:100%; object-fit:cover; object-position:center; }
+
+    .slide:nth-child(1){opacity:1;animation:slideshow 24s 0s infinite;}
+    .slide:nth-child(2){animation:slideshow 24s 6s infinite;}
+    .slide:nth-child(3){animation:slideshow 24s 12s infinite;}
+    .slide:nth-child(4){animation:slideshow 24s 18s infinite;}
+    .slide:nth-child(1) img{animation:kenburns 24s 0s infinite;}
+    .slide:nth-child(2) img{animation:kenburns 24s 6s infinite;}
+    .slide:nth-child(3) img{animation:kenburns 24s 12s infinite;}
+    .slide:nth-child(4) img{animation:kenburns 24s 18s infinite;}
+
+    .hero-right::before {
+      content:'';position:absolute;inset:0 auto 0 0;width:80px;z-index:3;pointer-events:none;
+      background:linear-gradient(to right,var(--truffle-dk),transparent);
+    }
+    .hero-right::after {
+      content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+      background:linear-gradient(170deg,rgba(62,40,29,.12) 0%,rgba(62,40,29,.5) 100%);
+    }
+
+    .slide-dots{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;gap:.5rem;z-index:4;}
+    .dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:background .3s,transform .3s;}
+    .dot.active{background:var(--straw);transform:scale(1.3);}
+
+    /* ── STRIP ── */
+    .strip {
+      background:var(--straw);
+      display:grid; grid-template-columns:repeat(3,1fr);
+    }
+    .strip-item{padding:2.2rem 2rem;text-align:center;border-right:1px solid rgba(92,61,46,.15);}
+    .strip-item:last-child{border-right:none;}
+    .strip-num{
+      font-family:'Playfair Display',serif;
+      font-size:2.4rem;font-weight:700;color:var(--truffle-dk);line-height:1;
+    }
+    .strip-label{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--truffle);opacity:.75;margin-top:.3rem;}
+
+    /* ── SECTION COMMONS ── */
+    .section-eyebrow {
+      font-family:'Lato',sans-serif;
+      font-size:.68rem;font-weight:700;
+      letter-spacing:.22em;text-transform:uppercase;
+      color:var(--straw-dk);margin-bottom:.8rem;
+      display:flex;align-items:center;gap:.7rem;
+    }
+    .section-eyebrow::before{content:'';display:block;width:24px;height:1px;background:var(--straw-dk);}
+    .section-title {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(1.9rem,3.5vw,2.9rem);
+      font-weight:700;line-height:1.1;color:var(--text);
+    }
+    .section-title em{font-style:italic;color:var(--truffle);}
+
+    /* ── CUCINA / SERVIZI ── */
+    #cucina { padding:6.5rem 5%; background:var(--linen); }
+    .cucina-intro{max-width:580px;margin-bottom:4rem;}
+    .cucina-intro p{font-size:.97rem;font-weight:300;color:var(--text-mid);margin-top:1rem;line-height:1.8;}
+
+    .cucina-grid{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:1.2rem;
+    }
+
+    .cucina-card{
+      background:var(--cream);
+      border-radius:4px;
+      padding:2rem 1.6rem;
+      border:1px solid var(--border);
+      transition:transform .25s,box-shadow .25s,border-color .25s;
+      position:relative;overflow:hidden;
+    }
+    .cucina-card::after{
+      content:'';position:absolute;
+      top:0;left:0;right:0;height:3px;
+      background:linear-gradient(90deg,var(--straw),var(--truffle-lt));
+      transform:scaleX(0);transform-origin:left;
+      transition:transform .4s cubic-bezier(.22,1,.36,1);
+    }
+    .cucina-card:hover{transform:translateY(-5px);box-shadow:0 16px 48px rgba(92,61,46,.1);border-color:rgba(92,61,46,.25);}
+    .cucina-card:hover::after{transform:scaleX(1);}
+
+    .cucina-icon{
+      width:42px;height:42px;
+      background:var(--parchment);border-radius:4px;
+      display:flex;align-items:center;justify-content:center;
+      margin-bottom:1.1rem;border:1px solid var(--border);
+    }
+    .cucina-icon svg{width:20px;height:20px;stroke:var(--truffle);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+
+    .cucina-card h3{
+      font-family:'Playfair Display',serif;
+      font-size:1.1rem;font-weight:700;
+      color:var(--text);margin-bottom:.6rem;
+    }
+    .cucina-card p{font-size:.86rem;font-weight:300;color:var(--text-mid);line-height:1.65;}
+
+    /* truffle highlight card */
+    .cucina-card.truffle-card { background:var(--truffle-dk); border-color:var(--truffle-lt); }
+    .cucina-card.truffle-card .cucina-icon { background:rgba(232,201,122,.15); border-color:rgba(232,201,122,.3); }
+    .cucina-card.truffle-card .cucina-icon svg { stroke:var(--straw); }
+    .cucina-card.truffle-card h3 { color:var(--cream); }
+    .cucina-card.truffle-card p { color:rgba(255,252,244,.55); }
+    .truffle-tag {
+      display:inline-block;
+      background:var(--straw); color:var(--truffle-dk);
+      font-size:.6rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+      padding:.18rem .6rem; border-radius:2px;
+      margin-bottom:.8rem;
+    }
+
+    /* ── ABOUT — "le mani che impastano" ── */
+    #about { padding:6.5rem 5%; background:var(--parchment); }
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+
+    .about-mosaic{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+    .mosaic-img{border-radius:4px;overflow:hidden;}
+    .mosaic-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s;}
+    .mosaic-img:hover img{transform:scale(1.04);}
+    .mosaic-img:nth-child(1){grid-row:span 2;aspect-ratio:3/4;}
+    .mosaic-img:nth-child(2),.mosaic-img:nth-child(3){aspect-ratio:4/3;}
+
+    .about-text .section-title{margin-bottom:1.2rem;}
+    .about-body{font-size:.97rem;font-weight:300;color:var(--text-mid);line-height:1.9;margin-bottom:2rem;}
+    .about-tags{display:flex;flex-wrap:wrap;gap:.6rem;}
+    .tag-pill{
+      background:var(--cream); color:var(--truffle);
+      font-size:.75rem; font-weight:700;
+      letter-spacing:.08em; text-transform:uppercase;
+      padding:.4rem 1rem; border-radius:100px;
+      border:1px solid var(--border);
+    }
+
+    /* ── RECENSIONI ── */
+    #recensioni{padding:6.5rem 5%;background:var(--linen);}
+    .reviews-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3.5rem;flex-wrap:wrap;gap:1.5rem;}
+    .reviews-score{text-align:right;}
+    .reviews-score-num{font-family:'Playfair Display',serif;font-size:3.2rem;font-weight:700;color:var(--text);line-height:1;}
+    .reviews-score-sub{font-size:.75rem;color:var(--text-lt);}
+    .reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;}
+
+    .review-card{
+      background:var(--cream);border-radius:4px;
+      padding:2rem;border:1px solid var(--border);
+      transition:transform .25s,box-shadow .25s;
+    }
+    .review-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(92,61,46,.08);}
+    .review-stars{display:flex;gap:2px;margin-bottom:.9rem;}
+    .review-stars svg{width:13px;height:13px;}
+    .review-open{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--straw-dk);line-height:1;margin-bottom:.3rem;opacity:.6;}
+    .review-text{font-size:.92rem;font-weight:300;color:var(--text-mid);line-height:1.7;font-style:italic;margin-bottom:1.1rem;}
+    .review-author{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700;color:var(--text);}
+    .review-source{font-size:.72rem;color:var(--text-lt);}
+
+    /* ── BOOKING CTA ── */
+    .booking-cta{
+      background:var(--truffle);
+      padding:5.5rem 5%;text-align:center;
+    }
+    .booking-cta h2{
+      font-family:'Playfair Display',serif;
+      font-size:clamp(2rem,4.5vw,3.2rem);
+      font-weight:700;line-height:1.15;color:var(--cream);
+      margin-bottom:.9rem;
+    }
+    .booking-cta h2 em{font-style:italic;color:var(--straw);}
+    .booking-cta p{font-size:.97rem;font-weight:300;color:rgba(255,252,244,.65);margin-bottom:2.4rem;}
+    .cta-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+    .btn-cream{
+      background:var(--straw);color:var(--truffle-dk);
+      font-family:'Lato',sans-serif;
+      font-size:.78rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+      padding:.9rem 2.4rem;text-decoration:none;border-radius:3px;
+      transition:opacity .2s,transform .2s;
+    }
+    .btn-cream:hover{opacity:.9;transform:translateY(-2px);}
+    .btn-ghost-light{
+      border:1.5px solid rgba(255,252,244,.3);color:var(--cream);
+      font-family:'Lato',sans-serif;
+      font-size:.78rem;font-weight:400;letter-spacing:.13em;text-transform:uppercase;
+      padding:.9rem 2.4rem;text-decoration:none;border-radius:3px;
+      transition:border-color .2s,background .2s,transform .2s;
+    }
+    .btn-ghost-light:hover{border-color:var(--cream);background:rgba(255,252,244,.1);transform:translateY(-2px);}
+
+    /* ── CONTATTI ── */
+    #contatti{padding:6rem 5%;background:var(--truffle-dk);}
+    #contatti .section-eyebrow{color:var(--straw);}
+    #contatti .section-eyebrow::before{background:var(--straw);}
+    #contatti .section-title{color:var(--cream);}
+    #contatti .section-title em{color:var(--straw);}
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:3rem;align-items:start;}
+    .contact-list{display:flex;flex-direction:column;gap:1.8rem;}
+    .contact-item{display:flex;gap:1.2rem;align-items:flex-start;}
+    .contact-icon{
+      width:42px;height:42px;flex-shrink:0;
+      background:rgba(232,201,122,.12);border-radius:3px;
+      border:1px solid rgba(232,201,122,.2);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .contact-icon svg{width:18px;height:18px;stroke:var(--straw);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+    .contact-label{font-size:.66rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--straw);margin-bottom:.2rem;opacity:.85;}
+    .contact-val{font-size:.95rem;color:rgba(255,252,244,.75);line-height:1.5;}
+    .contact-val a{color:rgba(255,252,244,.75);text-decoration:underline;text-underline-offset:3px;}
+    .contact-val a:hover{color:var(--straw);}
+    .map-embed{width:100%;height:360px;border:none;border-radius:4px;display:block;filter:sepia(15%) saturate(85%);}
+    .map-link{
+      display:inline-block;margin-top:1rem;
+      background:rgba(232,201,122,.12);color:var(--straw);
+      font-family:'Lato',sans-serif;
+      font-size:.72rem;font-weight:400;letter-spacing:.13em;text-transform:uppercase;
+      padding:.55rem 1.2rem;text-decoration:none;border-radius:3px;
+      border:1px solid rgba(232,201,122,.25);transition:background .2s;
+    }
+    .map-link:hover{background:rgba(232,201,122,.22);}
+
+    /* ── FOOTER ── */
+    footer{
+      background:#1F1209;
+      padding:2.5rem 5%;
+      display:flex;align-items:center;justify-content:space-between;
+      gap:1rem;flex-wrap:wrap;
+      border-top:1px solid rgba(232,201,122,.15);
+    }
+    .footer-logo{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--cream);}
+    .footer-logo em{font-style:italic;color:var(--straw);}
+    footer p{font-size:.75rem;color:rgba(255,252,244,.25);}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1100px){
+      .cucina-grid{grid-template-columns:repeat(3,1fr);}
+    }
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr;}
+      .hero-left{padding:4rem 5%;}
+      .hero-right{height:55vw;}
+      .hero-right::before{display:none;}
+      nav a:not(.btn-nav){display:none;}
+      .strip{grid-template-columns:1fr;}
+      .strip-item{border-right:none;border-bottom:1px solid rgba(92,61,46,.15);}
+      .cucina-grid{grid-template-columns:1fr 1fr;}
+      .about-grid,.contact-grid{grid-template-columns:1fr;gap:2.5rem;}
+      .reviews-header{flex-direction:column;align-items:flex-start;}
+      .reviews-score{text-align:left;}
+      footer{flex-direction:column;text-align:center;}
+    }
+    @media(max-width:560px){
+      .cucina-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <a href="#" class="logo">Konoba <em>Ulika</em></a>
+    <nav>
+      <a href="#cucina">Cucina</a>
+      <a href="#about">Chi Siamo</a>
+      <a href="#recensioni">Recensioni</a>
+      <a href="#contatti">Contatti</a>
+      <a href="https://wa.me/385983672369" target="_blank" class="btn-nav">Prenota</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">Konoba &nbsp;·&nbsp; Fažana, Istria</div>
+
+      <h1>Pasta fatta<br>a mano.<br><em>Pesce fresco.</em></h1>
+
+      <p class="hero-sub">Il cuore pulsante della cucina istriana a Fažana — dove la sfoglia si tira ogni mattina, il tartufo profuma l'aria e ogni piatto è un atto d'amore per una cultura millenaria.</p>
+
+      <div class="hero-ctas">
+        <a href="https://wa.me/385983672369" target="_blank" class="btn-straw">Prenota un Tavolo</a>
+        <a href="#cucina" class="btn-ghost">Scopri la Cucina</a>
+      </div>
+
+      <div class="hero-rating">
+        <div class="rating-num">4.6</div>
+        <div>
+          <div class="stars-row">
+            <svg viewBox="0 0 24 24" fill="#E8C97A"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            <svg viewBox="0 0 24 24" fill="#E8C97A"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            <svg viewBox="0 0 24 24" fill="#E8C97A"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            <svg viewBox="0 0 24 24" fill="#E8C97A"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            <svg viewBox="0 0 24 24" fill="#E8C97A" opacity=".4"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          </div>
+          <div class="rating-sub">2.064+ recensioni Google</div>
+        </div>
+        <div class="rating-sep"></div>
+        <div class="rating-note">"Un'esperienza che<br>si porta a casa nel cuore."</div>
+      </div>
+    </div>
+
+    <!-- SLIDESHOW -->
+    <div class="hero-right">
+      <div class="slideshow">
+        <div class="slide"><img src="https://images.unsplash.com/photo-1556761223-4c4282c73f77?w=1200&q=85" alt="Pasta fatta a mano"/></div>
+        <div class="slide"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=85" alt="Pesce fresco"/></div>
+        <div class="slide"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=85" alt="Konoba Ulika"/></div>
+        <div class="slide"><img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=1200&q=85" alt="Tartufo istriano"/></div>
+      </div>
+      <div class="slide-dots" id="dots">
+        <div class="dot active" onclick="goSlide(0)"></div>
+        <div class="dot" onclick="goSlide(1)"></div>
+        <div class="dot" onclick="goSlide(2)"></div>
+        <div class="dot" onclick="goSlide(3)"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STRIP -->
+  <div class="strip">
+    <div class="strip-item reveal">
+      <div class="strip-num">4.6★</div>
+      <div class="strip-label">Rating Google verificato</div>
+    </div>
+    <div class="strip-item reveal d2">
+      <div class="strip-num">2.064+</div>
+      <div class="strip-label">Recensioni da tutto il mondo</div>
+    </div>
+    <div class="strip-item reveal d3">
+      <div class="strip-num">Ogni mattina</div>
+      <div class="strip-label">Pasta fresca tirata a mano</div>
+    </div>
+  </div>
+
+  <!-- CUCINA -->
+  <section id="cucina">
+    <div class="cucina-intro reveal">
+      <div class="section-eyebrow">La Cucina</div>
+      <h2 class="section-title">Tradizione che<br><em>si tocca con le mani.</em></h2>
+      <p>Cinque ragioni per cui 2.064 persone hanno scritto una recensione su Google. Qui ogni piatto nasce da un gesto antico, ripetuto ogni giorno con la stessa cura.</p>
+    </div>
+    <div class="cucina-grid">
+
+      <div class="cucina-card reveal">
+        <div class="cucina-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 11h18v2a9 9 0 0 1-18 0v-2z"/><path d="M3 11c0-3 4-7 9-7s9 4 9 7"/><path d="M8 11V8"/><path d="M16 11V8"/><path d="M12 11V5"/></svg>
+        </div>
+        <h3>Pasta Fatta in Casa</h3>
+        <p>Sfoglia tirata a mano ogni mattina, formati tradizionali come fuži e pljukanci. Condita con sughi di mare o tartufo nero appena grattugiato.</p>
+      </div>
+
+      <div class="cucina-card reveal d1">
+        <div class="cucina-icon">
+          <svg viewBox="0 0 24 24"><path d="M2 16s2-8 10-8 10 8 10 8"/><path d="M6 16c0 0 1-3 6-3s6 3 6 3"/><circle cx="17" cy="11.5" r="1" fill="#5C3D2E" stroke="none"/></svg>
+        </div>
+        <h3>Pesce Fresco</h3>
+        <p>Pescato selezionato giornalmente dall'Adriatico, cotto alla griglia con olio d'oliva istriano, aglio e prezzemolo — o preparato in umido secondo tradizione.</p>
+      </div>
+
+      <div class="cucina-card reveal d2">
+        <div class="cucina-icon">
+          <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        </div>
+        <h3>Cucina Istriana</h3>
+        <p>Antipasti della terra e del mare, brodetti ricchi, carne alla brace, verdure di stagione dell'orto locale. La penisola intera in un piatto.</p>
+      </div>
+
+      <div class="cucina-card truffle-card reveal d3">
+        <span class="truffle-tag">Specialità</span>
+        <div class="cucina-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="9" cy="10" r="1" fill="#E8C97A" stroke="none"/><circle cx="14" cy="9" r="1" fill="#E8C97A" stroke="none"/><circle cx="11" cy="14" r="1" fill="#E8C97A" stroke="none"/><circle cx="15" cy="13" r="1" fill="#E8C97A" stroke="none"/></svg>
+        </div>
+        <h3>Tartufo</h3>
+        <p>Il diamante dell'Istria servito fresco o conservato su pasta, uova, carne — un lusso accessibile nel cuore della taverna.</p>
+      </div>
+
+      <div class="cucina-card reveal d4">
+        <div class="cucina-icon">
+          <svg viewBox="0 0 24 24"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 2v8.5a5 5 0 0 1-10 0V2"/><path d="M7 22v-6"/><path d="M17 22v-6"/></svg>
+        </div>
+        <h3>Vini Locali</h3>
+        <p>Selezione di Malvasia istriana, Teran e Muškat, abbinati ai piatti dalla cantina di produttori locali. La terra raccontata bicchiere dopo bicchiere.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CHI SIAMO -->
+  <section id="about">
+    <div class="about-grid">
+      <div class="about-mosaic reveal">
+        <div class="mosaic-img"><img src="https://images.unsplash.com/photo-1556761223-4c4282c73f77?w=800&q=85" alt="Mani che impastano"/></div>
+        <div class="mosaic-img"><img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&q=85" alt="Tavola istriana"/></div>
+        <div class="mosaic-img"><img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=85" alt="Piatto tradizionale"/></div>
+      </div>
+      <div class="about-text reveal d2">
+        <div class="section-eyebrow">Chi Siamo</div>
+        <h2 class="section-title">Un'esperienza<br>che <em>si porta a casa</em><br>nel cuore.</h2>
+        <p class="about-body">
+          Konoba Ulika è il cuore pulsante della cucina istriana a Fažana: un luogo dove la tradizione prende forma tra le mani di chi impasta la pasta ogni mattina e sceglie il pesce più fresco direttamente dal mercato.
+          <br><br>
+          Qui il tartufo profuma l'aria, i vini locali raccontano la terra, e ogni piatto è un atto d'amore verso una cultura culinaria millenaria. Non un ristorante per turisti — un posto dove i locali stessi tornano, e dove chi arriva da fuori capisce subito perché.
+        </p>
+        <div class="about-tags">
+          <span class="tag-pill">Pasta fresca quotidiana</span>
+          <span class="tag-pill">Pescato del giorno</span>
+          <span class="tag-pill">Tartufo istriano</span>
+          <span class="tag-pill">Vini locali selezionati</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECENSIONI -->
+  <section id="recensioni">
+    <div class="reviews-header">
+      <div class="reveal">
+        <div class="section-eyebrow">Recensioni</div>
+        <h2 class="section-title">2.064+ persone<br><em>non mentono.</em></h2>
+      </div>
+      <div class="reviews-score reveal d2">
+        <div class="stars-row" style="justify-content:flex-end;margin-bottom:.3rem;">
+          <svg viewBox="0 0 24 24" fill="#5C3D2E" width="20" height="20"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" fill="#5C3D2E" width="20" height="20"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" fill="#5C3D2E" width="20" height="20"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" fill="#5C3D2E" width="20" height="20"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" fill="#5C3D2E" opacity=".4" width="20" height="20"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        </div>
+        <div class="reviews-score-num">4.6 / 5</div>
+        <div class="reviews-score-sub">Media Google verificata</div>
+      </div>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card reveal">
+        <div class="review-stars">
+          <svg viewBox="0 0 24 24" fill="#5C3D2E"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" fill="#5C3D2E"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" fill="#5C3D2E"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" fill="#5C3D2E"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" fill="#5C3D2E"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        </div>
+        <div class="review-open">"</div>
+        <p class="review-text">Ho visto una foto della pasta su Instagram e non ho resistito. I pljukanci al tartufo sono stati la scoperta gastronomica del nostro viaggio in Istria. Torneremo sicuramente.</p>
+        <div class="review-author">Chiara &amp; Davide L.</div>
+        <div class="review-source">Google &middot; Italia</div>
+      </div>
+      <div class="review-card reveal d2">
+        <div class="review-stars">
+          <svg viewBox="0 0 24 24" fill="#5C3D2E"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" fill="#5C3D2E"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" fill="#5C3D2E"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" fill="#5C3D2E"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" fill="#5C3D2E"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        </div>
+        <div class="review-open">"</div>
+        <p class="review-text">Sono croato ma vivo a Vienna da anni — ogni volta che torno a casa passo da Ulika. È il sapore esatto della mia infanzia, fatto con lo stesso rispetto di sempre.</p>
+        <div class="review-author">Ivan K.</div>
+        <div class="review-source">Google &middot; Croazia</div>
+      </div>
+      <div class="review-card reveal d3">
+        <div class="review-stars">
+          <svg viewBox="0 0 24 24" fill="#5C3D2E"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" fill="#5C3D2E"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" fill="#5C3D2E"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" fill="#5C3D2E"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <svg viewBox="0 0 24 24" fill="#5C3D2E" opacity=".4"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        </div>
+        <div class="review-open">"</div>
+        <p class="review-text">As a food-focused traveler, this was exactly what I was looking for. The handmade pasta with truffle was outstanding, and the wine pairing recommendations were spot on. A real gem.</p>
+        <div class="review-author">James R.</div>
+        <div class="review-source">Google &middot; Regno Unito</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING CTA -->
+  <div class="booking-cta">
+    <h2 class="reveal">Prenota il tuo tavolo<br><em>da Ulika.</em></h2>
+    <p class="reveal d1">Ul. Ruže Petrović 76, Fažana &nbsp;·&nbsp; WhatsApp: +385 98 367 269</p>
+    <div class="cta-actions reveal d2">
+      <a href="https://wa.me/385983672369" target="_blank" class="btn-cream">Prenota su WhatsApp</a>
+      <a href="#contatti" class="btn-ghost-light">Come Raggiungerci</a>
+    </div>
+  </div>
+
+  <!-- CONTATTI -->
+  <section id="contatti">
+    <div class="section-eyebrow reveal">Dove Siamo</div>
+    <h2 class="section-title reveal">Nel cuore di<br><em>Fažana.</em></h2>
+    <div class="contact-grid">
+      <div class="contact-list reveal d1">
+        <div class="contact-item">
+          <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg></div>
+          <div>
+            <div class="contact-label">Indirizzo</div>
+            <div class="contact-val">Ul. Ruže Petrović 76<br>52212 Fažana, Istria</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <div>
+            <div class="contact-label">WhatsApp / Prenotazioni</div>
+            <div class="contact-val"><a href="https://wa.me/385983672369">+385 98 367 269</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div>
+            <div class="contact-label">Orari</div>
+            <div class="contact-val">Tutti i giorni — pranzo e cena<br><span style="opacity:.6;font-size:.87rem;">Stagione estiva · aperto senza interruzione</span></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M3 11h18v2a9 9 0 0 1-18 0v-2z"/><path d="M3 11c0-3 4-7 9-7s9 4 9 7"/><path d="M8 11V8"/><path d="M16 11V8"/><path d="M12 11V5"/></svg></div>
+          <div>
+            <div class="contact-label">Specialità</div>
+            <div class="contact-val">Pasta fresca fatta a mano ogni mattina<br><span style="opacity:.6;font-size:.87rem;">Tartufo, pesce fresco, vini locali</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal d3">
+        <iframe
+          class="map-embed"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2811.0!2d13.9180!3d44.9210!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x477cd7c0d1234567%3A0xabcdef0123498765!2sUl.+Ru%C5%BEe+Petrovi%C4%87+76%2C+52212+Fa%C5%BEana%2C+Croatia!5e0!3m2!1sit!2sit!4v1234567890"
+          allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Konoba Ulika — Ul. Ruže Petrović 76, Fažana">
+        </iframe>
+        <a href="https://www.google.com/maps/search/Ul+Ruze+Petrovic+76+Fazana+Croatia" target="_blank" class="map-link">
+          Apri in Google Maps &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Konoba <em>Ulika</em></div>
+    <p>&copy; 2025 Konoba Ulika &nbsp;&middot;&nbsp; Ul. Ruže Petrović 76, Fažana &nbsp;&middot;&nbsp; +385 98 367 269</p>
+    <p></p>
+  </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => obs.observe(el));
+
+    const dots = document.querySelectorAll('.dot');
+    let current = 0;
+    function goSlide(n) {
+      dots.forEach(d => d.classList.remove('active'));
+      if(dots[n]) dots[n].classList.add('active');
+      current = n;
+    }
+    setInterval(() => goSlide((current + 1) % dots.length), 6000);
+  </script>
+</body>
+</html>
